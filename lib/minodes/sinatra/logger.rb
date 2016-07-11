@@ -27,7 +27,6 @@ module Minodes
         SemanticLogger.add_appender(file_name: configuration.file_name, formatter: :color)
 
         ::Sinatra::Application.before do
-          puts "++ BEFORE ALL"
           env["rack.errors"] = Minodes::Sinatra::ErrorLogger.new
           env["rack.logger"] = ::SemanticLogger[self.class.name]
         end
