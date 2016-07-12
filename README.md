@@ -1,10 +1,26 @@
-# Minodes::Sinatra::Logger
+# Sinatra Logger
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/minodes/sinatra/logger`. To experiment with that code, run `bin/console` for an interactive prompt.
+For those who dealt with Sinatra Logging, and tried to configure it correctly (i.e. have Access logs, Error logs, and the normal `logger` functionality), they know how messy that is. Sinatra logging configuration is painful. To get a better understanding, refer to:
+* http://recipes.sinatrarb.com/p/middleware/rack_commonlogger (Just logs the access logs)
+* https://spin.atomicobject.com/2013/11/12/production-logging-sinatra/ (This goes further to add Errors to the logs as well. However, this breaks with modular Sinatra applications)
+* http://stackoverflow.com/questions/5995854/logging-in-sinatra (Or, just outdated answers)
+* https://github.com/kematzy/sinatra-logger (Or, outdated libraries)
 
-TODO: Delete this and the text above, and describe your gem
+If you come from a Rails background, you are probably used to the simplicity of:
+```
+logger.info "some info"
+logger.debug "some debugging"
+...
+```
 
-## Installation
+We offer a slightly "better looking" option using our library.
+
+### Dependency
+This library is an interface for `SemanticLogger` library (found here: https://github.com/rocketjob/semantic_logger). It just does the wiring for your `Sinatra` app, and gets you up and running with a simple line of code.
+
+Please, check the `SemanticLogger` (http://rocketjob.github.io/semantic_logger/) to get a glimpse of their pretty neat logging solution.
+
+### Installation
 
 Add this line to your application's Gemfile:
 
@@ -20,15 +36,43 @@ Or install it yourself as:
 
     $ gem install minodes-sinatra-logger
 
-## Usage
+### Usage
 
-TODO: Write usage instructions here
+We assume that you use either: `Sinatra::Base` or `Sinatra::Application`.
+#### One-layer Applications
+```
+class MyApp < Sinatra::Base
+  logger filename: "log/#{settings.environment}.log", level: :trace
 
-## Development
+  # ... remaining code ...
+end
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+#### Multi-layered Applications (Modular Applications)
+```
+class App1 < Sinatra::Application
+  # ... some App1 routes/code ...
+end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+class App2 < Sinatra::Application
+  # ... some App1 routes/code ...
+end
+
+class ContainerApp < Sinatra::Application
+  logger filename: "log/#{settings.environment}.log", level: :trace
+
+  use App1
+  use App2
+
+  # ... remaining code ...
+end
+```
+
+**NOTE**: You need to only use `logger filename: "", level: :trace` only once (precisely in the container app).
+
+### Development
+
+This gem is still in its beta phase. If you spot any errors, or propose some improvements, contact us: github [at] minodes [dot] com
 
 ## Contributing
 
@@ -38,4 +82,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
