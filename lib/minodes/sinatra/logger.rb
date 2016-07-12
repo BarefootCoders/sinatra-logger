@@ -14,57 +14,10 @@ module Minodes
       end
     end
 
-    # Quoted From: Rack::CommonLogger & Updated to suit Minodes::Sinatra::Logger.
-    # Refer to: https://github.com/rack/rack/blob/master/lib/rack/common_logger.rb
-    class AccessLogger
-      FORMAT = %{%s - %s [%s] "%s %s%s %s" %d %s %0.4f\n}
-
-      def initialize(app, logger=nil)
-        @app = app
-        @logger = ::SemanticLogger["Access"]
-      end
-
-      def call(env)
-        began_at = Time.now
-        status, header, body = @app.call(env)
-        header = ::Rack::Utils::HeaderHash.new(header)
-        body = ::Rack::BodyProxy.new(body) { log(env, status, header, began_at) }
-        [status, header, body]
-      end
-
-      private
-
-      def log(env, status, header, began_at)
-        now = ::Time.now
-        length = extract_content_length(header)
-
-        msg = FORMAT % [
-          env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-",
-          env["REMOTE_USER"] || "-",
-          now.strftime("%d/%b/%Y:%H:%M:%S %z"),
-          env["REQUEST_METHOD"],
-          env["PATH_INFO"],
-          env["QUERY_STRING"].empty? ? "" : "?#{env["QUERY_STRING"]}",
-          env["HTTP_VERSION"],
-          status.to_s[0..3],
-          length,
-          now - began_at ]
-
-        # This function is being called twice in the same request. Thus, it ends up printing output twice.
-        # Refer to: http://stackoverflow.com/questions/31206060/sinatra-with-puma-gives-twice-the-output-in-the-terminal
-        @logger.info(msg)
-      end
-
-      def extract_content_length(headers)
-        value = headers["Content-Length"] or return '-'
-        value.to_s == '0' ? '-' : value
-      end
-    end
-
     module Logger
       class << self
         attr_accessor :configuration
-        attr_accessor :written
+        attr_accessor :appenders_assigned
       end
 
       def self.configure
@@ -75,29 +28,43 @@ module Minodes
           raise "Minodes::Sinatra::Logger -- File name is not specified. Please, set `file_name` in the configuration block!"
         end
 
-        ::SemanticLogger.default_level = configuration.log_level
-        ::SemanticLogger.add_appender(file_name: configuration.file_name, formatter: :color)
+        if configuration.app.nil?
+          raise "Minodes::Sinatra::Logger -- App is not specified. Please, set `app` in the configuration block!"
+        end
 
         ::Sinatra::Base.class_eval do
           before do
-            env["rack.errors"] = Minodes::Sinatra::ErrorLogger.new
-            env["rack.logger"] = ::SemanticLogger[self.class.name]
-          end
+            unless Minodes::Sinatra::Logger.appenders_assigned      # Assign appenders only once in the request lifetime
+              Minodes::Sinatra::Logger.appenders_assigned = true    # There will be as many requests as there're applications in the middleware stack.
+                                                                    # For example, if you create multiple Sinatra::Application (and use then inside each other, this use case will pop up)
 
-          configure do
-            set :logging, nil
-            use Minodes::Sinatra::AccessLogger
+              env["rack.errors"] = Minodes::Sinatra::ErrorLogger.new
+              env["rack.logger"] = ::SemanticLogger[self.class.name]
+
+              # Re-assign the appenders (on every request)
+              ::SemanticLogger.default_level = configuration.log_level
+              ::SemanticLogger.appenders.each { |a| ::SemanticLogger.remove_appender(a) }
+              ::SemanticLogger.add_appender(file_name: configuration.file_name, formatter: :color)
+            end
           end
+        end
+
+        # It's enough to assign the common logger to the parent app! (even if there're multiple modular/nested apps included)
+        configuration.app.configure do
+          set :logging, true
+          use ::Rack::CommonLogger, ::SemanticLogger["Access"]
         end
       end
 
       class Configuration
         attr_accessor :log_level
         attr_accessor :file_name
+        attr_accessor :app
 
         def initialize
           @log_level = :warn
           @file_name = nil
+          @app = nil
         end
       end
     end
