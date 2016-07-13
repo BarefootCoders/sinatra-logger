@@ -76,7 +76,7 @@ This gem is still in its beta phase. If you spot any errors, or propose some imp
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/minodes-sinatra-logger.
+Bug reports and pull requests are welcome on GitHub at https://github.com/minodes/sinatra-logger. We would love to see your suggestions, fixes or improvements.
 
 
 ## License
