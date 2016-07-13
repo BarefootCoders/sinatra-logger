@@ -31,10 +31,6 @@ module Minodes
 
           config[:level] ||= :trace
 
-          ::SemanticLogger.default_level = config[:level]
-          ::SemanticLogger.appenders.each { |a| ::SemanticLogger.remove_appender(a) }
-          ::SemanticLogger.add_appender(file_name: config[:filename], formatter: :color)
-
           set :logging, true
           use ::Rack::CommonLogger, ::SemanticLogger["Access"]
 
