@@ -16,6 +16,10 @@ module Minodes
       def flush
         SemanticLogger.flush
       end
+
+      def <<(msg)
+        SemanticLogger["Error"] << msg
+      end
     end
 
     module Logger
