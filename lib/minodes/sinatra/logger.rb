@@ -1,4 +1,4 @@
-actirequire "minodes/sinatra/logger/version"
+require "minodes/sinatra/logger/version"
 require "sinatra"
 require "rack"
 require 'rack/body_proxy'
