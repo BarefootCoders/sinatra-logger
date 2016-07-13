@@ -18,7 +18,7 @@ module Minodes
       end
 
       def <<(msg)
-        SemanticLogger["Error"] << msg
+        # To satisfy test calls. This function is available on "Logger" class by default.
       end
     end
 
