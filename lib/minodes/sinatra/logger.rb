@@ -1,4 +1,4 @@
-require "minodes/sinatra/logger/version"
+actirequire "minodes/sinatra/logger/version"
 require "sinatra"
 require "rack"
 require 'rack/body_proxy'
@@ -11,6 +11,10 @@ module Minodes
     class ErrorLogger
       def puts(msg)
         SemanticLogger["Error"].error msg
+      end
+
+      def flush
+        SemanticLogger.flush
       end
     end
 
