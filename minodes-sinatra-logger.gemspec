@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'minodes/sinatra/logger/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "minodes-sinatra-logger"
+  spec.name          = "sinatra-logger"
   spec.version       = Minodes::Sinatra::Logger::VERSION
   spec.authors       = ["Yehya Abouelnaga"]
   spec.email         = ["yehya.abouelnaga@minodes.com"]
