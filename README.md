@@ -25,7 +25,7 @@ Please, check the `SemanticLogger` (http://rocketjob.github.io/semantic_logger/)
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'minodes-sinatra-logger'
+gem 'sinatra-logger', '>= 0.2.6'
 ```
 
 And then execute:
@@ -34,7 +34,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install minodes-sinatra-logger
+    $ gem install sinatra-logger -v '>= 0.2.6'
 
 ### Usage
 
