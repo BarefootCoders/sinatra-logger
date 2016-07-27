@@ -25,7 +25,7 @@ module Sinatra
     ::Sinatra::Base.class_eval do
       def self.logger(config)
         if config[:filename].nil?
-          raise "Sinatra::Logger -- File name is not specified. Please, set `file_name` in the configuration block!"
+          raise "Sinatra::Logger -- File name is not specified. Please, set `filename` in the configuration block!"
         end
 
         config[:level] ||= :trace
