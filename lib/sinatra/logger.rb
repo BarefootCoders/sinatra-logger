@@ -29,9 +29,13 @@ module Sinatra
         end
 
         config[:level] ||= :trace
+        ::SemanticLogger.default_level = config[:level]
 
         set :logging, true
         use ::Rack::CommonLogger, ::SemanticLogger["Access"]
+
+        # ActiveRecord Logger
+        ActiveRecord::Base.logger = ::SemanticLogger["SQL"]
 
         ::Sinatra::Base.before do
           ::SemanticLogger.default_level = config[:level]
