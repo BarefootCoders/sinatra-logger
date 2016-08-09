@@ -79,6 +79,8 @@ This gem is still in its beta phase. If you spot any errors, or propose some imp
 Bug reports and pull requests are welcome on GitHub at https://github.com/minodes/sinatra-logger. We would love to see your suggestions, fixes or improvements.
 
 ## Version Updates
+* 0.3.1
+  - BUG FIX: Make support for ActiveRecord logging optional (Check if ActiveRecord exists before handling it— @substars pull request).
 * 0.3.0
   - Add support for ActiveRecord logging
 * 0.2.6
