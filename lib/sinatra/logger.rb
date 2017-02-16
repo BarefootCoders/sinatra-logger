@@ -31,6 +31,9 @@ module Sinatra
         config[:level] ||= :trace
         ::SemanticLogger.default_level = config[:level]
 
+        config[:formatter] ||= :color
+        ::SemanticLogger.default_formatter = config[:formatter]
+
         set :logging, true
         use ::Rack::CommonLogger, ::SemanticLogger["Access"]
 
@@ -42,7 +45,7 @@ module Sinatra
         ::Sinatra::Base.before do
           ::SemanticLogger.default_level = config[:level]
           ::SemanticLogger.appenders.each { |a| ::SemanticLogger.remove_appender(a) }
-          ::SemanticLogger.add_appender(file_name: config[:filename], formatter: :color)
+          ::SemanticLogger.add_appender(file_name: config[:filename], formatter: config[:formatter])
 
           env["rack.errors"] = ::Sinatra::ErrorLogger.new
           env["rack.logger"] = ::SemanticLogger[self.class.name]
