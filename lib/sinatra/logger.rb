@@ -32,7 +32,6 @@ module Sinatra
         ::SemanticLogger.default_level = config[:level]
 
         config[:formatter] ||= :color
-        ::SemanticLogger.default_formatter = config[:formatter]
 
         set :logging, true
         use ::Rack::CommonLogger, ::SemanticLogger["Access"]
