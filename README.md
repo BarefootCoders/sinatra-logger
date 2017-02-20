@@ -85,6 +85,9 @@ This gem is still in its beta phase. If you spot any errors, or propose some imp
 Bug reports and pull requests are welcome on GitHub at https://github.com/minodes/sinatra-logger. We would love to see your suggestions, fixes or improvements.
 
 ## Version Updates
+* 0.3.2
+  - Add the ability to configure SemanticLogger to write logs in different formats (through Sinatra Logger configuration)– @rabidscorpio pull request.
+.
 * 0.3.1
   - BUG FIX: Make support for ActiveRecord logging optional (Check if ActiveRecord exists before handling it— @substars pull request).
 * 0.3.0
