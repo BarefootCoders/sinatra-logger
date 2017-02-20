@@ -70,6 +70,12 @@ end
 
 **NOTE**: You need to only use `logger filename: "", level: :trace` only once (precisely in the container app).
 
+
+#### Requiring The Logger
+```
+require 'sinatra/logger' # not 'sinatra-logger'
+```
+
 ### Development
 
 This gem is still in its beta phase. If you spot any errors, or propose some improvements, contact us: github [at] minodes [dot] com
