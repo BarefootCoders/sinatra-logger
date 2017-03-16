@@ -76,6 +76,43 @@ end
 require 'sinatra/logger' # not 'sinatra-logger'
 ```
 
+#### Using the logger in external classes/libraries
+Sinatra Logger is an interface/wrapper for the SemanticLogger. If you want to log from external classes, you can simply include an instance of the SemanticLogger as follows.
+
+```
+require 'sinatra/base'
+require 'sinatra/logger'
+
+class ExternalClass
+  include ::SemanticLogger::Loggable
+
+  def foo
+    logger.info "Foo"
+  end
+
+  def self.bar
+    logger.info "Bar"
+  end
+end
+
+class App < Sinatra::Base
+  logger filename: "test.#{settings.environment}.log", level: :trace
+
+  get '/' do
+    logger.info "GET / REQUESTED :D"
+
+    # Encapsulated Method
+    obj = ::ExternalClass.new
+    obj.foo
+
+    # Static Method
+    ::ExternalClass.bar
+  end
+
+  run! if app_file == $0
+end
+```
+
 ### Development
 
 This gem is still in its beta phase. If you spot any errors, or propose some improvements, contact us: github [at] minodes [dot] com
