@@ -30,7 +30,7 @@ module Sinatra
         config[:formatter] ||= :color
 
         set :logging, true
-        use ::Rack::CommonLogger, ::SemanticLogger["Access"]
+        use ::Rack::CommonLogger, ::SemanticLogger[config[:name] || self.class.name]
 
         if defined?(::ActiveRecord::Base)
           # ActiveRecord Logger
@@ -66,7 +66,7 @@ module Sinatra
           end
 
           env["rack.errors"] = ::Sinatra::ErrorLogger.new
-          env["rack.logger"] = ::SemanticLogger[self.class.name]
+          env["rack.logger"] = ::SemanticLogger[config[:name] || self.class.name]
         end
       end
     end

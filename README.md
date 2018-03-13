@@ -118,6 +118,8 @@ end
 Bug reports and pull requests are welcome on GitHub at https://github.com/BarefootCoders/sinatra-logger. We would love to see your suggestions, fixes or improvements.
 
 ## Version Updates
+* 0.4.1
+  - Allow logger name to be changed via the `name` configuration parameter
 * 0.4.0
   - Add appender flexibility, allowing for more than just `file` output.
 * 0.3.2
