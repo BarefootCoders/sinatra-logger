@@ -42,7 +42,7 @@ We assume that you use either: `Sinatra::Base` or `Sinatra::Application`.
 #### One-layer Applications
 ```
 class MyApp < Sinatra::Base
-  logger filename: "log/#{settings.environment}.log", level: :trace
+  logger appender: :file, filename: "log/#{settings.environment}.log", level: :trace
 
   # ... remaining code ...
 end
@@ -59,7 +59,7 @@ class App2 < Sinatra::Application
 end
 
 class ContainerApp < Sinatra::Application
-  logger filename: "log/#{settings.environment}.log", level: :trace
+  logger appender: :stdout, level: :trace
 
   use App1
   use App2
@@ -68,7 +68,7 @@ class ContainerApp < Sinatra::Application
 end
 ```
 
-**NOTE**: You need to only use `logger filename: "", level: :trace` only once (precisely in the container app).
+**NOTE**: You need to only use `logger appender: ...` only once (precisely in the container app).
 
 
 #### Requiring The Logger
@@ -96,7 +96,7 @@ class ExternalClass
 end
 
 class App < Sinatra::Base
-  logger filename: "test.#{settings.environment}.log", level: :trace
+  logger appender: :file, filename: "test.#{settings.environment}.log", level: :trace
 
   get '/' do
     logger.info "GET / REQUESTED :D"
@@ -113,15 +113,13 @@ class App < Sinatra::Base
 end
 ```
 
-### Development
-
-This gem is still in its beta phase. If you spot any errors, or propose some improvements, contact us: github [at] minodes [dot] com
-
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/minodes/sinatra-logger. We would love to see your suggestions, fixes or improvements.
+Bug reports and pull requests are welcome on GitHub at https://github.com/BarefootCoders/sinatra-logger. We would love to see your suggestions, fixes or improvements.
 
 ## Version Updates
+* 0.4.0
+  - Add appender flexibility, allowing for more than just `file` output.
 * 0.3.2
   - Add the ability to configure SemanticLogger to write logs in different formats (through Sinatra Logger configuration)– @rabidscorpio pull request.
 .

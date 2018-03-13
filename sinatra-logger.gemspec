@@ -6,12 +6,12 @@ require 'sinatra/logger/version'
 Gem::Specification.new do |spec|
   spec.name          = "sinatra-logger"
   spec.version       = Sinatra::Logger::VERSION
-  spec.authors       = ["Yehya Abouelnaga"]
-  spec.email         = ["yehya.abouelnaga@minodes.com"]
+  spec.authors       = ["Jason Berlinsky"]
+  spec.email         = ["jason@barefootcoders.com"]
 
   spec.summary       = %q{A gem that wires `SemanticLogger` to Sinatra painlessly}
   spec.description   = %q{Sinatra Logging is a pain. This gem helps with wiring Access logs, Error logs, and plain debugging logs (i.e. logger.info, logger.warn, ... etc).}
-  spec.homepage      = "https://github.com/minodes/sinatra-logger"
+  spec.homepage      = "https://github.com/BarefootCoders/sinatra-logger"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
